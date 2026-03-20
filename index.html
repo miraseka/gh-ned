@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Генератор договоров</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 8px; box-sizing: border-box; }
+        .hidden { display: none; }
+        button { padding: 10px 20px; background-color: #0056b3; color: white; border: none; cursor: pointer; font-size: 16px; width: 100%;}
+        button:hover { background-color: #004494; }
+    </style>
+</head>
+<body>
+
+    <h2>Генерация договора по шаблону</h2>
+    <form id="contractForm" action="http://localhost:5000/generate" method="POST">
+        
+        <div class="form-group">
+            <label>Дата договора</label>
+            <input type="date" name="contract_date" required>
+        </div>
+        <div class="form-group">
+            <label>Сумма договора (тенге)</label>
+            <input type="number" name="contract_amount" required>
+        </div>
+        <div class="form-group">
+            <label>Сумма рекламного бюджета (тенге)</label>
+            <input type="number" name="ad_budget" required>
+        </div>
+        <div class="form-group">
+            <label>Ежемесячная сумма SEO (тенге)</label>
+            <input type="number" name="seo_amount" required>
+        </div>
+
+        <div class="form-group">
+            <label>ТИП организации</label>
+            <select name="org_type" id="orgType" onchange="toggleFields()" required>
+                <option value="">Выберите тип...</option>
+                <option value="ТОО">ТОО</option>
+                <option value="ИП">ИП</option>
+                <option value="ФИЗЛИЦО">Физлицо</option>
+            </select>
+        </div>
+
+        <div id="fields_too" class="hidden org-fields">
+            <div class="form-group"><label>ФИО Директора</label><input type="text" name="director_fio"></div>
+            <div class="form-group"><label>Компания (ТОО «...»)</label><input type="text" name="company_name"></div>
+            <div class="form-group"><label>Адрес</label><input type="text" name="address"></div>
+            <div class="form-group"><label>БИН</label><input type="text" name="bin"></div>
+            <div class="form-group"><label>Банк</label><input type="text" name="bank"></div>
+            <div class="form-group"><label>КБе</label><input type="text" name="kbe"></div>
+            <div class="form-group"><label>БИК</label><input type="text" name="bik"></div>
+            <div class="form-group"><label>Номер счёта</label><input type="text" name="account_number"></div>
+        </div>
+
+        <div id="fields_ip" class="hidden org-fields">
+            <div class="form-group"><label>Компания (ИП «...»)</label><input type="text" name="ip_company_name"></div>
+            <div class="form-group"><label>Адрес</label><input type="text" name="ip_address"></div>
+            <div class="form-group"><label>ИИН</label><input type="text" name="ip_iin"></div>
+            <div class="form-group"><label>Банк</label><input type="text" name="ip_bank"></div>
+            <div class="form-group"><label>КБе</label><input type="text" name="ip_kbe"></div>
+            <div class="form-group"><label>БИК</label><input type="text" name="ip_bik"></div>
+            <div class="form-group"><label>Номер счёта</label><input type="text" name="ip_account_number"></div>
+        </div>
+
+        <div id="fields_fiz" class="hidden org-fields">
+            <div class="form-group"><label>ФИО</label><input type="text" name="fiz_fio"></div>
+            <div class="form-group"><label>Адрес</label><input type="text" name="fiz_address"></div>
+            <div class="form-group"><label>Телефон</label><input type="text" name="fiz_phone"></div>
+            <div class="form-group"><label>ИИН</label><input type="text" name="fiz_iin"></div>
+        </div>
+
+        <button type="submit">Создать договор</button> </form>
+
+    <script>
+        function toggleFields() {
+            // Скрываем все специфичные поля
+            document.querySelectorAll('.org-fields').forEach(el => el.classList.add('hidden'));
+            
+            // Показываем нужные в зависимости от выбора
+            const selectedType = document.getElementById('orgType').value;
+            if (selectedType === 'ТОО') {
+                document.getElementById('fields_too').classList.remove('hidden');
+            } else if (selectedType === 'ИП') {
+                document.getElementById('fields_ip').classList.remove('hidden');
+            } else if (selectedType === 'ФИЗЛИЦО') {
+                document.getElementById('fields_fiz').classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
